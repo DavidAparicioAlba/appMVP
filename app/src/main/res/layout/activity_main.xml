@@ -17,10 +17,12 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginStart="190dp"
                 android:id="@+id/dataTextView" tools:ignore="RtlCompat"/>
-        <ListView
+
+        <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/mainListView"
-                android:layout_marginTop="0dp"/>
+                android:layout_marginTop="0dp"
+        />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
