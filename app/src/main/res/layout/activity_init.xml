@@ -5,10 +5,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Views.InitActivity">
+        tools:context=".views.InitActivity">
 
     <LinearLayout
-            android:orientation="vertical"
             android:layout_width="413dp"
             android:layout_height="239dp" android:id="@+id/imageInitLinearLayout"
             tools:ignore="MissingConstraints" android:layout_marginTop="100dp" app:layout_constraintTop_toTopOf="parent"

@@ -1,4 +1,4 @@
-package com.example.appmvp.Models
+package com.example.appmvp.models
 
 
 import retrofit2.http.GET

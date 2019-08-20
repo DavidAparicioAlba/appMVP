@@ -1,20 +1,13 @@
-package com.example.appmvp.Presenters
+package com.example.appmvp.presenters
 
 
-import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
-import com.example.appmvp.Models.Post
-import com.example.appmvp.Models.RestPost
-import com.example.appmvp.R
-import com.example.appmvp.Views.MainActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.appmvp.models.Post
+import com.example.appmvp.models.RestPost
+import com.example.appmvp.views.MainActivity
 
 
 class MainPresenter {
+/*
         var listRV= MainActivity::listRView
         var postsList=ArrayList<Post>()
         internal fun getCurrentData() {
@@ -26,6 +19,5 @@ class MainPresenter {
             val call = service.getPostsData()
 
         }
-
+*/
 }
-

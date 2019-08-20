@@ -1,62 +1,41 @@
-package com.example.appmvp.Views
+package com.example.appmvp.views
 
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.appmvp.Models.RecyclerAdapter
-import com.example.appmvp.Models.RestPost
+import com.example.appmvp.models.Post
+import com.example.appmvp.models.AdapterRecycler
+import com.example.appmvp.models.RestPost
 import com.example.appmvp.R
-import retrofit2.Call
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class MainActivity : AppCompatActivity() {
-
-
-    var listRView: RecyclerView? = null
-    var listPosts = ArrayList<Post>()
-
-    lateinit var recyclerView: RecyclerView
-    lateinit var recyclerAdapter: RecyclerAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.mainListView)
-        recyclerAdapter = RecyclerAdapter(this)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = recyclerAdapter
-
-
-
-        //val restPost = RestPost.create().getPostsData()
-
-        /*restPost.enqueue(object : Callback<List<Post>>() {
-            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
-                if (response.body() != null)
-                    recyclerAdapter.setPostsListItems(response.body())
+        RestPost.create().getPostsData().enqueue(object : Callback<List<Post>> {
+            override fun onFailure(call: retrofit2.Call<List<Post>>?, t: Throwable?) {
+                Toast.makeText(this@MainActivity, "failed response", Toast.LENGTH_SHORT).show()
             }
 
-            override fun onFailure(call: Call<List<Post>>?, t: Throwable?) {
-            }
-        })*/
+            override fun onResponse(call: retrofit2.Call<List<Post>>?,
+                response: Response<List<Post>>?) {
+                    mainListView.layoutManager = LinearLayoutManager( this@MainActivity)
+                    mainListView.adapter = response?.body()?.let { AdapterRecycler(it) }
 
-        RestPost.create().getPostsData().enqueue(object: Callback<List<com.example.appmvp.Models.Post>>{
-            override fun onFailure(call: Call<List<com.example.appmvp.Models.Post>>?, t: Throwable?) {
-            }
 
-            override fun onResponse(
-                call: Call<List<com.example.appmvp.Models.Post>>?,
-                response: Response<List<com.example.appmvp.Models.Post>>?
-            ) {
-                response?.body()?.let {
-                    recyclerAdapter.setPostsListItems(response.body())}
             }
         })
+        Log.d("response LIST", RestPost.create().getPostsData().isExecuted.toString())
+        Log.d("response LIST", mainListView.adapter?.itemCount.toString())
 
     }
 

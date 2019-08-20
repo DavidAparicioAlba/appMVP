@@ -1,4 +1,4 @@
-package com.example.appmvp.Models
+package com.example.appmvp.models
 
 // nunca poner exclamacion
 data class Post(
