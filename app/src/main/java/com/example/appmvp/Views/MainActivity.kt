@@ -42,7 +42,8 @@ class MainActivity : AppCompatActivity() {
 
         // Launch second activity, pass part ID as string parameter
         val showDetailActivityIntent = Intent(this, DetailsActivity::class.java)
-        showDetailActivityIntent.putExtra(Intent.EXTRA_TEXT, partItem.id.toString())
+        showDetailActivityIntent.putExtra("title", partItem.title.toString())
+        showDetailActivityIntent.putExtra("body", partItem.body.toString())
         startActivity(showDetailActivityIntent)
     }
 
