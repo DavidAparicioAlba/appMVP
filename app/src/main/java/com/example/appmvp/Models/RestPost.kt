@@ -2,18 +2,18 @@ package com.example.appmvp.models
 
 
 import retrofit2.http.GET
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.Call as Call1
 
 
 interface RestPost {
     @GET("posts")
-    fun getPostsData(): Call<List<Post>>
+    fun getPostsData(): Call1<List<Post>>
 
     companion object {
 
-        var BASE_URL = "https://jsonplaceholder.typicode.com/"
+        private var BASE_URL = "https://jsonplaceholder.typicode.com/"
 
         fun create() : RestPost {
 

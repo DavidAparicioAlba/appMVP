@@ -14,8 +14,7 @@ class InitActivity : AppCompatActivity() {
     }
 
     fun startActivity(view: View){
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, MainActivity::class.java))
 
         //start new activity
     }
