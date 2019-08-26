@@ -12,10 +12,10 @@ class DetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
-        val title:String = intent.getStringExtra("title")
-        val body:String = intent.getStringExtra("body")
-        textViewBody.setText(body)
-        textViewTitle.setText(title)
+        val title:String? = intent.getStringExtra("title")
+        val body:String? = intent.getStringExtra("body")
+        textViewBody.text = body
+        textViewTitle.text = title
 
     }
 
