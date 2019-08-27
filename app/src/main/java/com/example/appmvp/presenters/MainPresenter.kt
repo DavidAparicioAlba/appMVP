@@ -72,8 +72,9 @@ class MainPresenter(var mainActivity: MainActivity) {
     fun fetch10(posts:MutableList<Post>, mainListView: RecyclerView){
         isLoading=true
         mainActivity.progressBar.visibility= View.VISIBLE
+        var sizePosts=showPosts!!.size
         for (i in 0..9){
-            showPosts!!.add(posts[i+ showPosts!!.size])
+            showPosts!!.add(posts[i+ sizePosts])
         }
 
         Handler().postDelayed({

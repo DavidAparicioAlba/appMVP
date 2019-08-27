@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     }
     fun postClicked(partItem : Post) {
-        Toast.makeText(this, "Clicked: ${partItem.id}", Toast.LENGTH_LONG).show()
+        //Toast.makeText(this, "Clicked: ${partItem.id}", Toast.LENGTH_LONG).show()
 
         // Launch second activity, pass part ID as string parameter
         val showDetailActivityIntent = Intent(this, DetailsActivity::class.java)
