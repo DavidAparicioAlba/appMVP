@@ -18,8 +18,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val mainPresenter = MainPresenter(this)
+
         mainPresenter.onLoad(mainListView)
-        Log.d("POSTS", mainPresenter.posts.toString())
 
     }
     fun postClicked(partItem : Post) {
