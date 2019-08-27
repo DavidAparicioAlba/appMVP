@@ -7,23 +7,19 @@
         android:layout_height="match_parent"
         tools:context=".views.InitActivity">
 
-    <LinearLayout
-            android:layout_width="413dp"
-            android:layout_height="239dp" android:id="@+id/imageInitLinearLayout"
-            tools:ignore="MissingConstraints" android:layout_marginTop="100dp" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="0dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="8dp">
-        <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" tools:src="@tools:sample/avatars" android:id="@+id/InitImageView"
-                tools:ignore="ContentDescription"/>
-    </LinearLayout>
+
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="410dp"
-            android:layout_height="254dp" tools:layout_editor_absoluteX="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
             android:id="@+id/buttonInitLinearLayout"
-            app:layout_constraintTop_toBottomOf="@+id/imageInitLinearLayout" tools:ignore="MissingConstraints">
+            tools:ignore="MissingConstraints" android:layout_marginTop="100dp" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="0dp" android:layout_marginStart="0dp">
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" tools:src="@tools:sample/avatars" android:id="@+id/initImageView"
+                tools:ignore="ContentDescription"/>
         <Button
                 android:text="@string/start_button"
                 android:layout_width="match_parent"
