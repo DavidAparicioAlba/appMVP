@@ -12,14 +12,17 @@ import com.example.appmvp.presenters.MainPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainView {
+    override fun setAdapter(posts: MutableList<Post>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val mainPresenter = MainPresenter(this)
-
-        mainPresenter.onLoad(mainListView)
+        val mainPresenter = MainPresenter()
+        mainPresenter.setViewContract(this)
+        mainPresenter.onLoad()
 
     }
     fun postClicked(partItem : Post) {

@@ -1,43 +1,72 @@
 package com.example.appmvp.presenters
 
-
-import android.os.Handler
+// no tendrian que estar
+/*import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appmvp.models.AdapterRecycler
+import com.example.appmvp.views.AdapterRecycler
+*/
+
+//
 import com.example.appmvp.models.Post
 import com.example.appmvp.services.RestPost
-import com.example.appmvp.views.MainActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.appmvp.services.repo.Repository
+// tampoco
+import com.example.appmvp.views.MainView
 import retrofit2.Callback
 import retrofit2.Response
+//
 
+class MainPresenter {
 
-class MainPresenter(var mainActivity: MainActivity) {
-
+    private var view: MainView? = null
     var posts:MutableList<Post>? = mutableListOf()
     var showPosts:MutableList<Post>? = mutableListOf()
-    lateinit var adaptr: AdapterRecycler
+   // lateinit var adaptr: AdapterRecycler
     var isLoading=false
+    var repo:Repository?=null
 
-    fun onLoad(mainListView: RecyclerView) {
-        RestPost.create().getPostsData().enqueue(object : Callback<MutableList<Post>> {
-            override fun onFailure(call: retrofit2.Call<MutableList<Post>>?, t: Throwable?) {
-                Toast.makeText(mainActivity, "failed response", Toast.LENGTH_SHORT).show()
+    fun setViewContract(view: MainView) {
+        this.view = view
+    }
+
+
+    fun onLoad(){
+        Repository("Retrofit", "get").fetch(object : Callback<MutableList<Post>> {
+            override fun onFailure(
+                call: retrofit2.Call<MutableList<Post>>?,
+                t: Throwable?
+            ) {
             }
             override fun onResponse(
                 call: retrofit2.Call<MutableList<Post>>?,
                 response: Response<MutableList<Post>>?
             ) {
-                val res = response?.body()
-                posts = res
-                if(showPosts!!.size<posts!!.size){
+                posts=response?.body()
+            }
+        })
+        RestPost.create().getPostsData().enqueue(object : Callback<MutableList<Post>> {
+            override fun onFailure(call: retrofit2.Call<MutableList<Post>>?, t: Throwable?) {
+                //Toast.makeText(mainActivity, "failed response", Toast.LENGTH_SHORT).show()
+            }
+            override fun onResponse(
+                call: retrofit2.Call<MutableList<Post>>?,
+                response: Response<MutableList<Post>>?
+            ) {
+                //mainView?.displayData(response?.body())
+                if (showPosts!!.size < posts!!.size) {
+                    /*
                     mainListView.layoutManager = LinearLayoutManager(mainActivity)
                     adaptr =
-                        response?.body()?.let { AdapterRecycler(showPosts) { partItem: Post -> mainActivity.postClicked(partItem) } }!!
+                        response?.body()?.let {
+                            AdapterRecycler(showPosts) { partItem: Post ->
+                                mainActivity.postClicked(
+                                    partItem
+                                )
+                            }
+                        }!!
                     mainListView.adapter = adaptr
                     fetch10(posts!!, mainListView)
                     mainListView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
@@ -56,7 +85,8 @@ class MainPresenter(var mainActivity: MainActivity) {
                     })
                     Log.d("SHOWPOSTS", showPosts?.size.toString())
                     Log.d("POSTS", posts?.size.toString())
-                }
+                }*/
+                }//
             }
         })
     }
@@ -71,11 +101,14 @@ class MainPresenter(var mainActivity: MainActivity) {
             if(::adaptr.isInitialized){
                 adaptr.notifyDataSetChanged()
             }else{
-                adaptr=AdapterRecycler(showPosts){ partItem: Post -> mainActivity.postClicked(partItem)}
+                adaptr= AdapterRecycler(showPosts) { partItem: Post ->
+                    mainActivity.postClicked(partItem)
+                }
                 mainListView.adapter=adaptr
             }
             isLoading=false
             mainActivity.progressBar.visibility= View.GONE
         },4000)
     }
+
 }
