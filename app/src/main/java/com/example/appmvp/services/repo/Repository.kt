@@ -5,6 +5,7 @@ import com.example.appmvp.models.Post
 import com.example.appmvp.services.RestPost
 import retrofit2.Callback
 
+
 class Repository(private val type:String, private val operation: String) {
 
     fun fetch(param: Callback<MutableList<Post>>) {
@@ -14,7 +15,7 @@ class Repository(private val type:String, private val operation: String) {
                 when (operation) {
                     "get" -> {
                         RestPost.create().getPostsData()
-                            .enqueue(callback)
+                            .enqueue(param)
 
                     }
                 }

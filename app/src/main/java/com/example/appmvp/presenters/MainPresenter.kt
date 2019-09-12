@@ -10,30 +10,29 @@ import com.example.appmvp.views.AdapterRecycler
 */
 
 //
+import android.util.Log
 import com.example.appmvp.models.Post
-import com.example.appmvp.services.RestPost
 import com.example.appmvp.services.repo.Repository
 // tampoco
-import com.example.appmvp.views.MainView
+import com.example.appmvp.views.contract
 import retrofit2.Callback
 import retrofit2.Response
 //
 
-class MainPresenter {
+class MainPresenter(view: contract.MainView): contract.Presenter {
 
-    private var view: MainView? = null
+    private var view: contract.MainView? = view
     var posts:MutableList<Post>? = mutableListOf()
     var showPosts:MutableList<Post>? = mutableListOf()
-   // lateinit var adaptr: AdapterRecycler
     var isLoading=false
-    var repo:Repository?=null
 
-    fun setViewContract(view: MainView) {
+   /* fun setViewContract(view: contract.MainView) {
         this.view = view
-    }
+    }*/
 
+    override fun onDestroy() {}
 
-    fun onLoad(){
+    override fun onInit(){
         Repository("Retrofit", "get").fetch(object : Callback<MutableList<Post>> {
             override fun onFailure(
                 call: retrofit2.Call<MutableList<Post>>?,
@@ -45,29 +44,15 @@ class MainPresenter {
                 response: Response<MutableList<Post>>?
             ) {
                 posts=response?.body()
+                fetch10(posts)
+
+                view?.setAdapter(showPosts)
+                view?.setScrollListener { checkPos(it) }
             }
         })
-        RestPost.create().getPostsData().enqueue(object : Callback<MutableList<Post>> {
-            override fun onFailure(call: retrofit2.Call<MutableList<Post>>?, t: Throwable?) {
-                //Toast.makeText(mainActivity, "failed response", Toast.LENGTH_SHORT).show()
-            }
-            override fun onResponse(
-                call: retrofit2.Call<MutableList<Post>>?,
-                response: Response<MutableList<Post>>?
-            ) {
-                //mainView?.displayData(response?.body())
+        /*
                 if (showPosts!!.size < posts!!.size) {
-                    /*
-                    mainListView.layoutManager = LinearLayoutManager(mainActivity)
-                    adaptr =
-                        response?.body()?.let {
-                            AdapterRecycler(showPosts) { partItem: Post ->
-                                mainActivity.postClicked(
-                                    partItem
-                                )
-                            }
-                        }!!
-                    mainListView.adapter = adaptr
+                    fetch10(response?.body()).let {  }
                     fetch10(posts!!, mainListView)
                     mainListView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
                         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -83,21 +68,38 @@ class MainPresenter {
                             super.onScrolled(recyclerView, dx, dy)
                         }
                     })
-                    Log.d("SHOWPOSTS", showPosts?.size.toString())
-                    Log.d("POSTS", posts?.size.toString())
-                }*/
+                }
                 }//
             }
-        })
+        })*/
     }
-    fun fetch10(posts:MutableList<Post>, mainListView: RecyclerView){
+    fun checkPos(dy: Int){
+        if (dy>0){
+            val visibleItemCount= showPosts?.size
+            val total = posts?.size
+            if (!isLoading){
+                if (total!=null&&visibleItemCount!=null){
+                    if (visibleItemCount<total){
+
+                        fetch10(posts)
+
+                    }
+                }
+            }
+            Log.d("SHOWPOSTS", showPosts?.size.toString())
+        }
+    }
+    fun fetch10(posts: MutableList<Post>?){
         isLoading=true
-        mainActivity.progressBar.visibility= View.VISIBLE
+
         val sizePosts=showPosts!!.size
         for (i in 0..9){
-            showPosts!!.add(posts[i+ sizePosts])
+            posts?.get(i+ sizePosts)?.let { showPosts?.add(it) }
         }
-        Handler().postDelayed({
+        view?.setAdapter(showPosts)
+        view?.handlePosts(showPosts)
+
+        /*Handler().postDelayed({
             if(::adaptr.isInitialized){
                 adaptr.notifyDataSetChanged()
             }else{
@@ -108,7 +110,7 @@ class MainPresenter {
             }
             isLoading=false
             mainActivity.progressBar.visibility= View.GONE
-        },4000)
+        },4000)*/
     }
 
 }
