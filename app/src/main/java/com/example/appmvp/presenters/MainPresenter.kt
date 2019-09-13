@@ -47,7 +47,7 @@ class MainPresenter(view: contract.MainView): contract.Presenter {
                 fetch10(posts)
 
                 view?.setAdapter(showPosts)
-                view?.setScrollListener { checkPos(it) }
+                view?.setScrollListener { fetch10(posts) }
             }
         })
         /*
@@ -90,14 +90,22 @@ class MainPresenter(view: contract.MainView): contract.Presenter {
         }
     }
     fun fetch10(posts: MutableList<Post>?){
+        val visibleItemCount= showPosts?.size
+        val total = posts?.size
+        if (!isLoading) {
+            if (total != null && visibleItemCount != null) {
+                if (visibleItemCount + 9 < total) {
+                    for (i in 0..9) {
+                        posts?.get(i + visibleItemCount)?.let { showPosts?.add(it) }
+                    }
+                    view?.setAdapter(showPosts)
+                    view?.handlePosts(showPosts)
+                }
+            }
+
+        }
         isLoading=true
 
-        val sizePosts=showPosts!!.size
-        for (i in 0..9){
-            posts?.get(i+ sizePosts)?.let { showPosts?.add(it) }
-        }
-        view?.setAdapter(showPosts)
-        view?.handlePosts(showPosts)
 
         /*Handler().postDelayed({
             if(::adaptr.isInitialized){

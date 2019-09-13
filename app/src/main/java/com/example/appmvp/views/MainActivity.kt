@@ -52,13 +52,23 @@ class MainActivity : AppCompatActivity(), contract.MainView {
         mainListView.adapter = adaptr
     }
 
-    override fun setScrollListener(funct: (posts:Int)->Unit) {
-        mainListView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+    override fun setScrollListener(funct: (posts:MutableList<Post>?)->Unit) {
+        /*mainListView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 scrollOverall+=dy
                 funct(dy)
                 Log.d("recyclerView", scrollOverall.toString())
                 super.onScrolled(recyclerView, dx, dy)
+            }
+        })*/
+        mainListView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(!recyclerView.canScrollVertically(1)) {
+                    mainPresenter.isLoading=false
+                    funct(mainPresenter.posts)
+                    Log.d("showposts", mainPresenter.showPosts?.size.toString())
+                }
             }
         })
     }
