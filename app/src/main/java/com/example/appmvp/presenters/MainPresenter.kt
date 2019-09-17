@@ -73,7 +73,7 @@ class MainPresenter(view: contract.MainView): contract.Presenter {
             }
         })*/
     }
-    fun checkPos(dy: Int){
+    /*fun checkPos(dy: Int){
         if (dy>0){
             val visibleItemCount= showPosts?.size
             val total = posts?.size
@@ -88,7 +88,7 @@ class MainPresenter(view: contract.MainView): contract.Presenter {
             }
             Log.d("SHOWPOSTS", showPosts?.size.toString())
         }
-    }
+    }*/
     fun fetch10(posts: MutableList<Post>?){
         val visibleItemCount= showPosts?.size
         val total = posts?.size
@@ -98,7 +98,7 @@ class MainPresenter(view: contract.MainView): contract.Presenter {
                     for (i in 0..9) {
                         posts?.get(i + visibleItemCount)?.let { showPosts?.add(it) }
                     }
-                    view?.setAdapter(showPosts)
+                   // view?.setAdapter(showPosts)
                     view?.handlePosts(showPosts)
                 }
             }

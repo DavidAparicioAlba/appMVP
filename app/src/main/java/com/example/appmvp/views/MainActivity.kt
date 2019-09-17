@@ -66,7 +66,10 @@ class MainActivity : AppCompatActivity(), contract.MainView {
                 super.onScrollStateChanged(recyclerView, newState)
                 if(!recyclerView.canScrollVertically(1)) {
                     mainPresenter.isLoading=false
-                    funct(mainPresenter.posts)
+                    Handler().postDelayed({
+                            funct(mainPresenter.posts)
+                        }, 4000)
+
                     Log.d("showposts", mainPresenter.showPosts?.size.toString())
                 }
             }
