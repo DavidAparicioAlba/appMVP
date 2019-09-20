@@ -17,9 +17,6 @@ import kotlinx.android.synthetic.main.activity_splash.*
 import kotlin.LazyThreadSafetyMode.NONE
 
 
-
-
-
 class SplashActivity : AppCompatActivity() {
 
     var circ1:ImageView?=null
@@ -33,7 +30,6 @@ class SplashActivity : AppCompatActivity() {
 
     private var dX = 0f
     private var dY = 0f
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +47,7 @@ class SplashActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             startActivity(Intent(this, InitActivity::class.java))
-        }, 15000)
+        }, 10000)
 
     }
 

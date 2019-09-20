@@ -16,15 +16,19 @@ import com.example.appmvp.presenters.MainPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(), contract.MainView {
+class MainActivity : AppCompatActivity(), Contract.MainView {
+    override fun search(view: View, funct: (word: String?) -> Unit) {
+        Toast.makeText(this, "word: ${filterTitle.text}", Toast.LENGTH_LONG).show()
+        Log.d("word", filterTitle.text.toString())
+    }
 
     var adaptr:AdapterRecycler?=null
     val mainPresenter = MainPresenter(this)
-    var scrollOverall:Int=0
+
 
     override fun handlePosts(posts: MutableList<Post>?) {
         showProgressBar()
-        Handler().postDelayed({
+        Handler().post({
             if(adaptr!=null){
                 adaptr?.notifyDataSetChanged()
             }else{
@@ -34,8 +38,11 @@ class MainActivity : AppCompatActivity(), contract.MainView {
                 mainListView.adapter=adaptr
             }
             mainPresenter.isLoading=false
+
             hideProgressBar()
-        },4000)
+
+
+        })
 
     }
 
@@ -53,22 +60,15 @@ class MainActivity : AppCompatActivity(), contract.MainView {
     }
 
     override fun setScrollListener(funct: (posts:MutableList<Post>?)->Unit) {
-        /*mainListView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                scrollOverall+=dy
-                funct(dy)
-                Log.d("recyclerView", scrollOverall.toString())
-                super.onScrolled(recyclerView, dx, dy)
-            }
-        })*/
+
         mainListView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if(!recyclerView.canScrollVertically(1)) {
                     mainPresenter.isLoading=false
-                    Handler().postDelayed({
-                            funct(mainPresenter.posts)
-                        }, 4000)
+                    Handler().post({
+                            funct(mainPresenter.newList?.toMutableList())
+                        })
 
                     Log.d("showposts", mainPresenter.showPosts?.size.toString())
                 }
@@ -103,4 +103,12 @@ class MainActivity : AppCompatActivity(), contract.MainView {
         startActivity(showDetailActivityIntent)
         mainPresenter.onDestroy()
     }
+
+    fun filterPosts(view: View) {
+        mainPresenter.search(filterTitle.text.toString())
+        Toast.makeText(this, "word: ${filterTitle.text}", Toast.LENGTH_LONG).show()
+        Log.d("word", filterTitle.text.toString())
+    }
+
+
 }

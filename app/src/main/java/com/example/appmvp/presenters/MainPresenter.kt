@@ -1,34 +1,22 @@
 package com.example.appmvp.presenters
 
-// no tendrian que estar
-/*import android.os.Handler
-import android.util.Log
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.appmvp.views.AdapterRecycler
-*/
 
-//
+
 import android.util.Log
 import com.example.appmvp.models.Post
 import com.example.appmvp.services.repo.Repository
-// tampoco
-import com.example.appmvp.views.contract
+import com.example.appmvp.views.Contract
 import retrofit2.Callback
 import retrofit2.Response
-//
 
-class MainPresenter(view: contract.MainView): contract.Presenter {
 
-    private var view: contract.MainView? = view
+class MainPresenter(view: Contract.MainView): Contract.Presenter {
+
+    private var view: Contract.MainView? = view
     var posts:MutableList<Post>? = mutableListOf()
     var showPosts:MutableList<Post>? = mutableListOf()
+    var newList:List<Post>? = listOf()
     var isLoading=false
-
-   /* fun setViewContract(view: contract.MainView) {
-        this.view = view
-    }*/
 
     override fun onDestroy() {}
 
@@ -44,51 +32,23 @@ class MainPresenter(view: contract.MainView): contract.Presenter {
                 response: Response<MutableList<Post>>?
             ) {
                 posts=response?.body()
-                fetch10(posts)
-
+                newList=posts?.toList()
+                fetch10(newList?.toMutableList())
                 view?.setAdapter(showPosts)
-                view?.setScrollListener { fetch10(posts) }
+                view?.setScrollListener { fetch10(newList?.toMutableList()) }
             }
         })
-        /*
-                if (showPosts!!.size < posts!!.size) {
-                    fetch10(response?.body()).let {  }
-                    fetch10(posts!!, mainListView)
-                    mainListView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                            if (dy>0){
-                                val visibleItemCount= showPosts!!.size
-                                val total = posts!!.size
-                                if (!isLoading){
-                                    if (visibleItemCount<total){
-                                        fetch10(posts!!, mainListView)
-                                    }
-                                }
-                            }
-                            super.onScrolled(recyclerView, dx, dy)
-                        }
-                    })
-                }
-                }//
-            }
-        })*/
     }
-    /*fun checkPos(dy: Int){
-        if (dy>0){
-            val visibleItemCount= showPosts?.size
-            val total = posts?.size
-            if (!isLoading){
-                if (total!=null&&visibleItemCount!=null){
-                    if (visibleItemCount<total){
+    fun search(word: String){
 
-                        fetch10(posts)
+        showPosts?.clear()
+        newList = posts?.filter { post -> post.title?.contains(word, true) ?: false }
+        Log.d("size", newList?.size.toString())
+        fetch10(newList?.toMutableList())
+        view?.handlePosts(showPosts)
 
-                    }
-                }
-            }
-            Log.d("SHOWPOSTS", showPosts?.size.toString())
-        }
-    }*/
+    }
+
     fun fetch10(posts: MutableList<Post>?){
         val visibleItemCount= showPosts?.size
         val total = posts?.size
@@ -96,29 +56,13 @@ class MainPresenter(view: contract.MainView): contract.Presenter {
             if (total != null && visibleItemCount != null) {
                 if (visibleItemCount + 9 < total) {
                     for (i in 0..9) {
-                        posts?.get(i + visibleItemCount)?.let { showPosts?.add(it) }
+                        posts.get(i + visibleItemCount).let { showPosts?.add(it) }
                     }
-                   // view?.setAdapter(showPosts)
+
                     view?.handlePosts(showPosts)
                 }
             }
-
         }
         isLoading=true
-
-
-        /*Handler().postDelayed({
-            if(::adaptr.isInitialized){
-                adaptr.notifyDataSetChanged()
-            }else{
-                adaptr= AdapterRecycler(showPosts) { partItem: Post ->
-                    mainActivity.postClicked(partItem)
-                }
-                mainListView.adapter=adaptr
-            }
-            isLoading=false
-            mainActivity.progressBar.visibility= View.GONE
-        },4000)*/
     }
-
 }
