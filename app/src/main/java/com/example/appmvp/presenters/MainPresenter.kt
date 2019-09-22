@@ -61,6 +61,11 @@ class MainPresenter(view: Contract.MainView): Contract.Presenter {
 
                     view?.handlePosts(showPosts)
                 }
+                if (total<10){
+                    for (i in 0..total-1){
+                        posts.get(i).let { showPosts?.add(it) }
+                    }
+                }
             }
         }
         isLoading=true
