@@ -33,9 +33,11 @@ class MainPresenter(view: Contract.MainView): Contract.Presenter {
             ) {
                 posts=response?.body()
                 newList=posts?.toList()
+
                 fetch10(newList?.toMutableList())
+                val numelements = newList?.size
                 view?.setAdapter(showPosts)
-                view?.setScrollListener { fetch10(newList?.toMutableList()) }
+                view?.setScrollListener { if (numelements ?: 0 >showPosts?.size ?: 0 ) {fetch10(newList?.toMutableList())} }
             }
         })
     }
@@ -61,13 +63,18 @@ class MainPresenter(view: Contract.MainView): Contract.Presenter {
 
                     view?.handlePosts(showPosts)
                 }
-                if (total<10){
-                    for (i in 0..total-1){
-                        posts.get(i).let { showPosts?.add(it) }
+                if ((total-visibleItemCount)<10&&(total-visibleItemCount)>0){
+                    for (i in 0..(total-visibleItemCount-1)) {
+                        posts.get(i + visibleItemCount).let { showPosts?.add(it) }
                     }
+                    Log.d("diference", (total-visibleItemCount).toString())
+                    view?.handlePosts(showPosts)
                 }
+
             }
         }
+        Log.d("size newList", newList?.size.toString())
+        Log.d("size showposts", showPosts?.size.toString())
         isLoading=true
     }
 }
